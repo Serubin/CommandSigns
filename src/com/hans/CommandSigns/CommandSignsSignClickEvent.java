@@ -109,6 +109,22 @@ public class CommandSignsSignClickEvent {
 				line = line.replace("<Y>", ""+ player.getLocation().getBlockY());
 				line = line.replace("<Z>", ""+ player.getLocation().getBlockZ());
 				line = line.replace("<NAME>", ""+ player.getName());
+				line = line.replace("&0", "§0");
+				line = line.replace("&1", "§1");
+				line = line.replace("&2", "§2");
+				line = line.replace("&3", "§3");
+				line = line.replace("&4", "§4");
+				line = line.replace("&5", "§5");
+				line = line.replace("&6", "§6");
+				line = line.replace("&7", "§7");
+				line = line.replace("&8", "§8");
+				line = line.replace("&9", "§9");
+				line = line.replace("&a", "§a");
+				line = line.replace("&b", "§b");
+				line = line.replace("&c", "§c");
+				line = line.replace("&d", "§d");
+				line = line.replace("&e", "§e");
+				line = line.replace("&f", "§f");
 				commandList.add(line);
 			}
 		}

@@ -47,14 +47,14 @@ public class CommandSigns extends JavaPlugin
 		
 		getCommand("commandsigns").setExecutor(commandExecutor);
 
-		pm.registerEvent(Event.Type.PLAYER_INTERACT, this.playerListener,Event.Priority.Monitor, this);
-		pm.registerEvent(Event.Type.BLOCK_BREAK, this.blockListener, Event.Priority.Normal, this);
+		pm.registerEvents(this.playerListener,this);
+		pm.registerEvents( this.blockListener, this);
 	}
 	
 	public boolean hasPermission(Player player, String string) {
 		boolean permission = player.hasPermission(string);
 		if(permission == false) {
-			player.sendMessage("§cYou do not have permission.");
+			player.sendMessage("ï¿½cYou do not have permission.");
 		}
 		return permission;
 	}

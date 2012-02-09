@@ -4,16 +4,18 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 
-public class CommandSignsPlayerListener extends PlayerListener {
+public class CommandSignsPlayerListener implements Listener {
 	private CommandSigns plugin;
 	
 	public CommandSignsPlayerListener(CommandSigns instance){
 		plugin = instance;
 	}
 	
-	@Override
+	@EventHandler(priority=EventPriority.MONITOR)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		CommandSignsSignClickEvent signClickEvent = new CommandSignsSignClickEvent(plugin);
 		if(event.getAction() == Action.RIGHT_CLICK_BLOCK) {

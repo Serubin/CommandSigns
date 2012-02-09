@@ -3,7 +3,7 @@ package com.hans.CommandSigns;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.block.Sign;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.permissions.PermissionAttachment;
@@ -17,7 +17,7 @@ public class CommandSignsSignClickEvent {
 		plugin = instance;
 	}
 	
-	public void onRightClick(PlayerInteractEvent event, Sign sign)
+	public void onRightClick(PlayerInteractEvent event, Block sign)
 	{
 		Player player = event.getPlayer();
 		CommandSignsLocation location = new CommandSignsLocation(sign.getX(), sign.getY(), sign.getZ());

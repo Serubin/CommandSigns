@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -54,11 +55,11 @@ public class CommandSigns extends JavaPlugin {
     public boolean hasPermission(Player player, String string) {
         boolean permission = player.hasPermission(string);
         if (permission == false) {
-            player.sendMessage("�cYou do not have permission.");
+            player.sendMessage(ChatColor.RED + "You don't have permission!");
         }
         return permission;
     }
-
+//TODO change to mysql storage
     public void loadFile() {
         File folder = getDataFolder();
         String folderName = folder.getParent();

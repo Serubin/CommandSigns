@@ -1,18 +1,11 @@
 package com.hans.CommandSigns;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Scanner;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,6 +14,7 @@ public class CommandSigns extends JavaPlugin {
     public final Logger log = Logger.getLogger("Minecraft");
 
     // plugin variables
+    //TODO rework hashmaps and data storage
     public final HashMap<String, CommandSignsPlayerState> playerStates = new HashMap<String, CommandSignsPlayerState>();
     public final HashMap<Location, CommandSignsText> activeSigns = new HashMap<Location, CommandSignsText>();
     public final HashMap<String, CommandSignsText> playerText = new HashMap<String, CommandSignsText>();

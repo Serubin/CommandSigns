@@ -14,10 +14,13 @@ public class CommandSigns extends JavaPlugin {
     public final Logger log = Logger.getLogger("Minecraft");
 
     // plugin variables
-    //TODO rework hashmaps and data storage
-    public final HashMap<String, CommandSignsPlayerState> playerStates = new HashMap<String, CommandSignsPlayerState>();
-    public final HashMap<Location, CommandSignsText> activeSigns = new HashMap<Location, CommandSignsText>();
-    public final HashMap<String, CommandSignsText> playerText = new HashMap<String, CommandSignsText>();
+    // TODO rework hashmaps and data storage
+    private final HashMap<String, CommandSignsPlayerState> playerStates = new HashMap<String, CommandSignsPlayerState>();
+    private final HashMap<Location, Integer> activeSignIds = new HashMap<Location, Integer>();
+    private final HashMap<Integer, CommandSignsData> activeSigns = new HashMap<Integer, CommandSignsData>();
+    private final HashMap<String, CommandSignsText> playerText = new HashMap<String, CommandSignsText>();
+
+    private MySQLDatabase db = null;
 
     // listeners
     private final CommandSignsPlayerListener playerListener = new CommandSignsPlayerListener(
@@ -47,6 +50,8 @@ public class CommandSigns extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveConfig();
 
+        db = new MySQLDatabase(this);
+
         getCommand("commandsigns").setExecutor(commandExecutor);
 
         pm.registerEvents(this.playerListener, this);
@@ -61,12 +66,104 @@ public class CommandSigns extends JavaPlugin {
         return permission;
     }
 
+    /**
+     * Logs with plugin tag at info level
+     * 
+     * @param line
+     *            of text
+     */
     public void logInfo(String line) {
         log.info(tag + line);
     }
-    public void logDebug(String line){
-        if(debug){
+
+    /**
+     * Logs with plugin tag at warning level
+     * 
+     * @param line
+     *            of text
+     */
+    public void logWarning(String line) {
+        log.warning(tag + line);
+    }
+
+    /**
+     * logs with debug tag
+     * 
+     * @param line
+     *            of text
+     */
+    public void logDebug(String line) {
+        if (debug) {
             log.info(tag + " DEBUG:" + line);
         }
+    }
+
+    /**
+     * Get PlayerState from player name
+     * 
+     * @param player
+     * @return CommandSignsPlayerState
+     */
+    public CommandSignsPlayerState getPlayerStates(String player) {
+        return playerStates.get(player);
+    }
+
+    /**
+     * Add PlayerState
+     * 
+     * @param player
+     * @param playerState
+     */
+    public void addPlayerState(String player,
+            CommandSignsPlayerState playerState) {
+        playerStates.put(player, playerState);
+    }
+
+    /**
+     * Remove playerState
+     * 
+     * @param player
+     */
+    public void removePlayerState(String player) {
+        playerStates.remove(player);
+    }
+
+    /**
+     * Get PlayerText from player name
+     * 
+     * @param player
+     * @return CommandSignsText
+     */
+    public CommandSignsText getPlayerText(String player) {
+        return playerText.get(player);
+    }
+
+    /**
+     * Add PlayerText
+     * 
+     * @param player
+     * @param playerState
+     */
+    public void addPlayerText(String player, CommandSignsText text) {
+        playerText.put(player, text);
+    }
+
+    /**
+     * Remove playerText
+     * 
+     * @param player
+     */
+    public void removePlayerText(String player) {
+        playerText.remove(player);
+    }
+
+    /**
+     * Does PlayerText contain key
+     * 
+     * @param player
+     * @return boolean
+     */
+    public boolean playerTextContainsKey(String player) {
+        return playerText.containsKey(player);
     }
 }

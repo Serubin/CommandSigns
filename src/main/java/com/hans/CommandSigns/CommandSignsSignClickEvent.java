@@ -23,8 +23,8 @@ public class CommandSignsSignClickEvent {
         Player player = event.getPlayer();
         Location location = new Location(sign.getWorld(), sign.getX(),
                 sign.getY(), sign.getZ());
-        CommandSignsPlayerState state = plugin.playerStates.get(player
-                .getName());
+        CommandSignsPlayerState state = plugin
+                .getPlayerStates(player.getName());
         if (state != null) {
             if (state.equals(CommandSignsPlayerState.ENABLE)) {
                 enableSign(player, location);
@@ -160,10 +160,10 @@ public class CommandSignsSignClickEvent {
             player.sendMessage("Sign is already enabled!");
             return;
         }
-        CommandSignsText text = plugin.playerText.get(player.getName());
+        CommandSignsText text = plugin.getPlayerText(player.getName());
         plugin.activeSigns.put(location, text);
-        plugin.playerStates.remove(player.getName());
-        plugin.playerText.remove(player.getName());
+        plugin.removePlayerState(player.getName());
+        plugin.removePlayerText(player.getName());
         player.sendMessage("CommandSign enabled");
     }
 
@@ -178,7 +178,7 @@ public class CommandSignsSignClickEvent {
                 player.sendMessage("Line" + i + ": " + lines[i]);
             }
         }
-        plugin.playerStates.remove(player.getName());
+        plugin.removePlayerState(player.getName());
     }
 
     public void copySign(Player player, Location location) {
@@ -187,7 +187,7 @@ public class CommandSignsSignClickEvent {
         if (text == null) {
             player.sendMessage("Sign is not a CommandSign.");
         }
-        plugin.playerText.put(playerName, text);
+        plugin.addPlayerText(playerName, text);
         String[] lines = text.getText();
         for (int i = 0; i < lines.length; i++) {
             if (lines[i] != null) {
@@ -195,22 +195,22 @@ public class CommandSignsSignClickEvent {
             }
         }
         player.sendMessage("Added to CommandSigns clipboard. Click a sign to enable.");
-        plugin.playerStates.put(playerName, CommandSignsPlayerState.ENABLE);
+        plugin.addPlayerState(playerName, CommandSignsPlayerState.ENABLE);
     }
 
     public void disableSign(Player player, Location location) {
         String playerName = player.getName();
         if (!plugin.activeSigns.containsKey(location)) {
             player.sendMessage("Sign is not enabled!");
-            plugin.playerStates.remove(playerName);
+            plugin.removePlayerState(playerName);
             return;
         }
         plugin.activeSigns.remove(location);
-        if (plugin.playerText.containsKey(playerName)) {
-            plugin.playerStates.put(playerName, CommandSignsPlayerState.ENABLE);
+        if (plugin.playerTextContainsKey(playerName)) {
+            plugin.addPlayerState(playerName, CommandSignsPlayerState.ENABLE);
             player.sendMessage("Sign disabled. You still have text in your clipboard.");
         } else {
-            plugin.playerStates.remove(playerName);
+            plugin.removePlayerState(playerName);
             player.sendMessage("Sign disabled.");
         }
     }

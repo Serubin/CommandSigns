@@ -14,7 +14,6 @@ public class CommandSigns extends JavaPlugin {
     public final Logger log = Logger.getLogger("Minecraft");
 
     // plugin variables
-    // TODO rework hashmaps and data storage
     private final HashMap<String, CommandSignsPlayerState> playerStates = new HashMap<String, CommandSignsPlayerState>();
     private final HashMap<Location, Integer> activeSignIds = new HashMap<Location, Integer>();
     private final HashMap<Integer, CommandSignsData> activeSigns = new HashMap<Integer, CommandSignsData>();
@@ -213,11 +212,52 @@ public class CommandSigns extends JavaPlugin {
 
     /**
      * Add sign data to hashmaps
+     * <p/>
+     * Should only be called by MySQLDatabase
      * 
      * @param data
      */
     public void addSignData(CommandSignsData data) {
         activeSigns.put(data.getId(), data);
         activeSignIds.put(data.getLocation(), data.getId());
+    }
+
+    /**
+     * Removes sign data from hashmaps
+     * <p/>
+     * Should only be called by MySQLDatabase
+     * 
+     * @param id
+     *            Sign id
+     */
+    public void removeSignData(int id) {
+        activeSignIds.remove(activeSigns.get(id).getLocation());
+        activeSigns.remove(id);
+    }
+
+    /**
+     * Adds data to database
+     * 
+     * @param data
+     *            CommandSignsData object
+     */
+    public boolean addSign(CommandSignsData data) {
+        if (db.addSign(data.getLocation(), data.getText().getText()))
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Removes data from database
+     * 
+     * @param id
+     *            Of commandsign
+     */
+    public boolean removeSign(int id) {
+        if (db.removeSign(id))
+            return true;
+        else
+            return false;
     }
 }

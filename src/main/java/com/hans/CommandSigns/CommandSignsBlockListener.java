@@ -24,9 +24,8 @@ public class CommandSignsBlockListener implements Listener {
         Block block = event.getBlock();
         if (block.getType() == Material.SIGN_POST
                 || block.getType() == Material.WALL_SIGN) {
-            Location location = new Location(block.getWorld(), block.getX(),
-                    block.getY(), block.getZ());
-            if (plugin.activeSigns.containsKey(location)) {
+
+            if (plugin.signCheck(block.getLocation())) {
                 event.getPlayer().sendMessage(
                         ChatColor.RED
                                 + "CommandSign text must be removed first.");

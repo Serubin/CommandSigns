@@ -5,7 +5,7 @@
 	<artifactId>CommandSigns</artifactId>
 	<version>1.2.0</version>
 	<packaging>jar</packaging>
-	<name>SeruBans</name>
+	<name>CommandSigns</name>
 	<url></url>
 	
 	<properties>

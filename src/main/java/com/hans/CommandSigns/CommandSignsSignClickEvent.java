@@ -3,6 +3,7 @@ package com.hans.CommandSigns;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -108,7 +109,7 @@ public class CommandSignsSignClickEvent {
             CommandSignsText commandSign) {
         List<String> commandList = new ArrayList<String>();
         String line;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < commandSign.getText().length; i++) {
             line = commandSign.getLine(i);
             if (line != null) {
                 line = line.replace("<X>", ""
@@ -161,10 +162,14 @@ public class CommandSignsSignClickEvent {
             return;
         }
         CommandSignsText text = plugin.getPlayerText(player.getName());
-        // TODO add sign
-        plugin.removePlayerState(player.getName());
-        plugin.removePlayerText(player.getName());
-        player.sendMessage("CommandSign enabled");
+        if (plugin.addSign(new CommandSignsData(0, location, text))) {
+            plugin.removePlayerState(player.getName());
+            plugin.removePlayerText(player.getName());
+            player.sendMessage("CommandSign enabled");
+        } else {
+            player.sendMessage(ChatColor.RED
+                    + "There was an error enabling CommandSign, check console for error!");
+        }
     }
 
     public void readSign(Player player, Location location) {
@@ -199,19 +204,31 @@ public class CommandSignsSignClickEvent {
     }
 
     public void disableSign(Player player, Location location) {
+        int id = plugin.getSignId(location);
         String playerName = player.getName();
         if (!plugin.signCheck(location)) {
             player.sendMessage("Sign is not enabled!");
             plugin.removePlayerState(playerName);
             return;
         }
-        // TODO remove sign
         if (plugin.playerTextContainsKey(playerName)) {
             plugin.addPlayerState(playerName, CommandSignsPlayerState.ENABLE);
-            player.sendMessage("Sign disabled. You still have text in your clipboard.");
+            if (plugin.removeSign(id)) {
+                player.sendMessage("Sign disabled. You still have text in your clipboard.");
+            } else {
+                player.sendMessage(ChatColor.RED
+                        + "There was an error disabling this CommandSign. Check console for error!");
+                player.sendMessage("You still have text in your clipboard!");
+            }
+
         } else {
             plugin.removePlayerState(playerName);
-            player.sendMessage("Sign disabled.");
+            if (plugin.removeSign(id)) {
+                player.sendMessage("Sign disabled.");
+            } else {
+                player.sendMessage(ChatColor.RED
+                        + "There was an error disabling this CommandSign. Check console for error!");
+            }
         }
     }
 }

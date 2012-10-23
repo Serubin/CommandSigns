@@ -37,11 +37,11 @@ public class CommandSignsSignClickEvent {
             }
             return;
         }
-        if (!plugin.activeSigns.containsKey(location)) {
+        if (!plugin.signCheck(location)) {
             return;
         }
         List<String> commandList = parseCommandSign(player,
-                plugin.activeSigns.get(location));
+                plugin.getSignText(location));
         if (plugin.hasPermission(player, "CommandSigns.use.regular")) {
             String groupFilter = null;
 
@@ -156,19 +156,19 @@ public class CommandSignsSignClickEvent {
      */
 
     public void enableSign(Player player, Location location) {
-        if (plugin.activeSigns.containsKey(location)) {
+        if (plugin.signCheck(location)) {
             player.sendMessage("Sign is already enabled!");
             return;
         }
         CommandSignsText text = plugin.getPlayerText(player.getName());
-        plugin.activeSigns.put(location, text);
+        // TODO add sign
         plugin.removePlayerState(player.getName());
         plugin.removePlayerText(player.getName());
         player.sendMessage("CommandSign enabled");
     }
 
     public void readSign(Player player, Location location) {
-        CommandSignsText text = plugin.activeSigns.get(location);
+        CommandSignsText text = plugin.getSignText(location);
         if (text == null) {
             player.sendMessage("Sign is not a CommandSign.");
         }
@@ -183,7 +183,7 @@ public class CommandSignsSignClickEvent {
 
     public void copySign(Player player, Location location) {
         String playerName = player.getName();
-        CommandSignsText text = plugin.activeSigns.get(location);
+        CommandSignsText text = plugin.getSignText(location);
         if (text == null) {
             player.sendMessage("Sign is not a CommandSign.");
         }
@@ -200,12 +200,12 @@ public class CommandSignsSignClickEvent {
 
     public void disableSign(Player player, Location location) {
         String playerName = player.getName();
-        if (!plugin.activeSigns.containsKey(location)) {
+        if (!plugin.signCheck(location)) {
             player.sendMessage("Sign is not enabled!");
             plugin.removePlayerState(playerName);
             return;
         }
-        plugin.activeSigns.remove(location);
+        // TODO remove sign
         if (plugin.playerTextContainsKey(playerName)) {
             plugin.addPlayerState(playerName, CommandSignsPlayerState.ENABLE);
             player.sendMessage("Sign disabled. You still have text in your clipboard.");

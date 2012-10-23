@@ -166,4 +166,58 @@ public class CommandSigns extends JavaPlugin {
     public boolean playerTextContainsKey(String player) {
         return playerText.containsKey(player);
     }
+
+    /**
+     * Get sign id
+     * 
+     * @param loc
+     *            Location of sign
+     * @return Sign id
+     */
+    public int getSignId(Location loc) {
+        return activeSignIds.get(loc);
+    }
+
+    /**
+     * Gets sign text from location
+     * 
+     * @param loc
+     *            Sign location
+     * @return Sign text
+     */
+    public CommandSignsText getSignText(Location loc) {
+        return activeSigns.get(getSignId(loc)).getText();
+    }
+
+    /**
+     * Checks if commandsigns exists
+     * 
+     * @param loc
+     *            Location of commandsign
+     * @return boolean
+     */
+    public boolean signCheck(Location loc) {
+        return activeSignIds.containsKey(loc);
+    }
+
+    /**
+     * Checks if commandsign exists
+     * 
+     * @param id
+     *            Id of commandsign
+     * @return boolean
+     */
+    public boolean signCheck(int id) {
+        return activeSigns.containsKey(id);
+    }
+
+    /**
+     * Add sign data to hashmaps
+     * 
+     * @param data
+     */
+    public void addSignData(CommandSignsData data) {
+        activeSigns.put(data.getId(), data);
+        activeSignIds.put(data.getLocation(), data.getId());
+    }
 }

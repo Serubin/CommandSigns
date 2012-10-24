@@ -6,9 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 
 public class MySQLDatabase {
 
@@ -22,6 +24,7 @@ public class MySQLDatabase {
                 .getString("mysql.username"),
                 plugin.getConfig().getString("mysql.password"));
         createTable();
+        loadData();
 
     }
 
@@ -30,7 +33,7 @@ public class MySQLDatabase {
      * <p/>
      * Called from startSQL()
      */
-    protected void createConnection(String host, String database,
+    private void createConnection(String host, String database,
             String username, String password) {
         String sqlUrl = String.format("jdbc:mysql://%s/%s", host, database);
 
@@ -51,7 +54,7 @@ public class MySQLDatabase {
      * <p/>
      * Creates 'signs' and 'text' table
      */
-    protected void createTable() {
+    private void createTable() {
         try {
             // signs table
             ResultSet rs = conn.getMetaData().getTables(null, null, "signs",
@@ -90,6 +93,51 @@ public class MySQLDatabase {
             plugin.logWarning("There was a problem creating or initializing the tables!");
             e.printStackTrace();
         }
+    }
+
+    private boolean loadData() {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int id = 0;
+        int ErrorLoad = 0;
+        try {
+            ps = conn.prepareStatement("SELECT * FROM `signs`;");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                id = rs.getInt(1);
+                String worldStr = rs.getString(2);
+                int x = rs.getInt(3);
+                int y = rs.getInt(4);
+                int z = rs.getInt(5);
+                // Gets text
+                ps = conn
+                        .prepareStatement("SELECT * FROM `text` WHERE `id`='?' ORDER BY `line` ASC;");
+                rs = ps.executeQuery();
+                ArrayList<String> list = new ArrayList<String>();
+                while (rs.next()) {
+                    list.add(rs.getString(2));
+                }
+                // Checks for valid world
+                World world = plugin.getServer().getWorld(worldStr);
+                if (world != null) {
+                    HashMaps.addSignData(new CommandSignsData(id, new Location(
+                            world, x, y, z), new CommandSignsText(list
+                            .toArray(new String[list.size()]))));
+                } else {
+                    ErrorLoad++;
+                }
+            }
+            // Error / Success reporting
+            plugin.logInfo(Integer.toString(HashMaps.signNumber())
+                    + " signs loaded successfully!");
+            plugin.logInfo(Integer.toString(ErrorLoad)
+                    + " signs were not loaded");
+        } catch (SQLException e) {
+            plugin.logWarning("There was an error loading data: ");
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     /**

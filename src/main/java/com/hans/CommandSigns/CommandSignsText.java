@@ -2,13 +2,18 @@ package com.hans.CommandSigns;
 
 public class CommandSignsText {
 
-    private String[] text = new String[10];
+    private String[] text = null;
 
     /**
      * Initializes and sets text to null until set.
+     * 
+     * @param index
+     *            Length of signs
+     * 
      */
-    CommandSignsText() {
-        for (int i = 0; i < 10; i++) {
+    public CommandSignsText(int index) {
+        text = new String[index];
+        for (int i = 0; i < index; i++) {
             this.text[i] = null;
         }
     }
@@ -20,7 +25,30 @@ public class CommandSignsText {
      *            array of text
      */
     public CommandSignsText(String[] lines) {
+        text = new String[lines.length];
         this.text = lines;
+    }
+
+    /**
+     * Initializes and sets text from lines. remaining items are set to null
+     * 
+     * @param index
+     *            Max amount of lines
+     * @param lines
+     *            Lines
+     */
+    public CommandSignsText(int index, String[] lines) {
+        if (index < lines.length) {
+            index = lines.length;
+        }
+        this.text = new String[index];
+        for (int i = 0; i < index; i++) {
+            if (lines[i] != null) {
+                this.text[i] = lines[i];
+            } else {
+                this.text[i] = null;
+            }
+        }
     }
 
     /**

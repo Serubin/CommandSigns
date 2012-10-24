@@ -1,5 +1,6 @@
 package com.hans.CommandSigns;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -8,9 +9,11 @@ import org.bukkit.entity.Player;
 class CommandSignsCommand implements CommandExecutor {
 
     private CommandSigns plugin;
+    private int max_lines;
 
     public CommandSignsCommand(CommandSigns plugin) {
         this.plugin = plugin;
+        max_lines = plugin.getConfig().getInt("max-lines");
     }
 
     public boolean onCommand(CommandSender sender, Command cmd,
@@ -29,12 +32,12 @@ class CommandSignsCommand implements CommandExecutor {
                     try {
                         lineNumber = Integer.parseInt(args[0].substring(4));
                     } catch (NumberFormatException ex) {
-                        player.sendMessage("Line number invalid!");
+                        player.sendMessage(ChatColor.RED + "Line number invalid!");
                         return true;
                     }
                     CommandSignsText text;
                     if ((text = HashMaps.getPlayerText(playerName)) == null) {
-                        text = new CommandSignsText();
+                        text = new CommandSignsText(max_lines);
                     }
                     String line = "";
                     for (int i = 1; i < args.length; i++) {
@@ -47,7 +50,7 @@ class CommandSignsCommand implements CommandExecutor {
                         while (line.contains("/*")) {
                             line = line.replace("/*", "/");
                         }
-                        player.sendMessage("You may not make signs with '/*'");
+                        player.sendMessage(ChatColor.RED + "You may not make signs with '/*'");
                     }
                     text.setLine(lineNumber, line);
                     HashMaps.addPlayerText(playerName, text);
@@ -89,7 +92,7 @@ class CommandSignsCommand implements CommandExecutor {
                     player.sendMessage("CommandSign text and status cleared.");
                 }
             } else {
-                player.sendMessage("Wrong CommandSigns command syntax.");
+                player.sendMessage(ChatColor.RED + "Wrong CommandSigns command syntax.");
             }
             return true;
         }

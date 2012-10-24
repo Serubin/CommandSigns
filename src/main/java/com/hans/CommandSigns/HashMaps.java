@@ -114,6 +114,15 @@ public class HashMaps {
     }
 
     /**
+     * Get total signs
+     * 
+     * @return int
+     */
+    public static int signNumber() {
+        return activeSigns.size();
+    }
+
+    /**
      * Checks if commandsign exists
      * 
      * @param id
@@ -125,7 +134,7 @@ public class HashMaps {
     }
 
     /**
-     * Add sign data to hashmaps
+     * Add sign data to hashmaps, both activeSigns and ActiveSignIds
      * <p/>
      * Should only be called by MySQLDatabase
      * 
@@ -134,6 +143,32 @@ public class HashMaps {
     public static void addSignData(CommandSignsData data) {
         activeSigns.put(data.getId(), data);
         activeSignIds.put(data.getLocation(), data.getId());
+    }
+
+    /**
+     * Adds id and location to hashmap activeSignsIds
+     * <p/>
+     * Should only be called by MySQLDatabase
+     * 
+     * @param id
+     * @param loc
+     */
+    public static void addSignData(int id, Location loc) {
+        activeSignIds.put(loc, id);
+    }
+
+    /**
+     * Add sign data to hashmaps
+     * <p/>
+     * Should only be called by MySQLDatabase
+     * 
+     * @param id
+     * @param loc
+     * @param lines
+     */
+    public static void addSignData(int id, Location loc, String[] lines) {
+        activeSigns.put(id, new CommandSignsData(id, loc, new CommandSignsText(
+                lines)));
     }
 
     /**

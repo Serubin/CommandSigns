@@ -14,11 +14,6 @@ public class CommandSigns extends JavaPlugin {
     public final Logger log = Logger.getLogger("Minecraft");
 
     // plugin variables
-    private final HashMap<String, CommandSignsPlayerState> playerStates = new HashMap<String, CommandSignsPlayerState>();
-    private final HashMap<Location, Integer> activeSignIds = new HashMap<Location, Integer>();
-    private final HashMap<Integer, CommandSignsData> activeSigns = new HashMap<Integer, CommandSignsData>();
-    private final HashMap<String, CommandSignsText> playerText = new HashMap<String, CommandSignsText>();
-
     private MySQLDatabase db = null;
 
     // listeners
@@ -30,7 +25,7 @@ public class CommandSigns extends JavaPlugin {
 
     private String version;
     private String name;
-    private String tag = "[" + name + "]";
+    private String tag;
 
     private boolean debug;
 
@@ -44,6 +39,7 @@ public class CommandSigns extends JavaPlugin {
     public void onEnable() {
         version = this.getDescription().getVersion();
         name = this.getDescription().getName();
+        tag = "[" + name + "] ";
         log.info(name + " version " + version + " is loading...");
         PluginManager pm = getServer().getPluginManager();
         getConfig().options().copyDefaults(true);
@@ -97,143 +93,6 @@ public class CommandSigns extends JavaPlugin {
         }
     }
 
-    /**
-     * Get PlayerState from player name
-     * 
-     * @param player
-     * @return CommandSignsPlayerState
-     */
-    public CommandSignsPlayerState getPlayerStates(String player) {
-        return playerStates.get(player);
-    }
-
-    /**
-     * Add PlayerState
-     * 
-     * @param player
-     * @param playerState
-     */
-    public void addPlayerState(String player,
-            CommandSignsPlayerState playerState) {
-        playerStates.put(player, playerState);
-    }
-
-    /**
-     * Remove playerState
-     * 
-     * @param player
-     */
-    public void removePlayerState(String player) {
-        playerStates.remove(player);
-    }
-
-    /**
-     * Get PlayerText from player name
-     * 
-     * @param player
-     * @return CommandSignsText
-     */
-    public CommandSignsText getPlayerText(String player) {
-        return playerText.get(player);
-    }
-
-    /**
-     * Add PlayerText
-     * 
-     * @param player
-     * @param playerState
-     */
-    public void addPlayerText(String player, CommandSignsText text) {
-        playerText.put(player, text);
-    }
-
-    /**
-     * Remove playerText
-     * 
-     * @param player
-     */
-    public void removePlayerText(String player) {
-        playerText.remove(player);
-    }
-
-    /**
-     * Does PlayerText contain key
-     * 
-     * @param player
-     * @return boolean
-     */
-    public boolean playerTextContainsKey(String player) {
-        return playerText.containsKey(player);
-    }
-
-    /**
-     * Get sign id
-     * 
-     * @param loc
-     *            Location of sign
-     * @return Sign id
-     */
-    public int getSignId(Location loc) {
-        return activeSignIds.get(loc);
-    }
-
-    /**
-     * Gets sign text from location
-     * 
-     * @param loc
-     *            Sign location
-     * @return Sign text
-     */
-    public CommandSignsText getSignText(Location loc) {
-        return activeSigns.get(getSignId(loc)).getText();
-    }
-
-    /**
-     * Checks if commandsigns exists
-     * 
-     * @param loc
-     *            Location of commandsign
-     * @return boolean
-     */
-    public boolean signCheck(Location loc) {
-        return activeSignIds.containsKey(loc);
-    }
-
-    /**
-     * Checks if commandsign exists
-     * 
-     * @param id
-     *            Id of commandsign
-     * @return boolean
-     */
-    public boolean signCheck(int id) {
-        return activeSigns.containsKey(id);
-    }
-
-    /**
-     * Add sign data to hashmaps
-     * <p/>
-     * Should only be called by MySQLDatabase
-     * 
-     * @param data
-     */
-    public void addSignData(CommandSignsData data) {
-        activeSigns.put(data.getId(), data);
-        activeSignIds.put(data.getLocation(), data.getId());
-    }
-
-    /**
-     * Removes sign data from hashmaps
-     * <p/>
-     * Should only be called by MySQLDatabase
-     * 
-     * @param id
-     *            Sign id
-     */
-    public void removeSignData(int id) {
-        activeSignIds.remove(activeSigns.get(id).getLocation());
-        activeSigns.remove(id);
-    }
 
     /**
      * Adds data to database

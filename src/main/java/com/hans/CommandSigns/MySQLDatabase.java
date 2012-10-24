@@ -111,11 +111,11 @@ public class MySQLDatabase {
                     .prepareStatement(
                             "INSERT INTO `signs` (`world`, `x`, `y`, `z`) VALUES (?,?,?,?);",
                             Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, loc.getWorld().toString());
+            ps.setString(1, loc.getWorld().getName());
             ps.setDouble(2, loc.getX());
             ps.setDouble(3, loc.getY());
             ps.setDouble(4, loc.getZ());
-            ps.executeQuery();
+            ps.executeUpdate();
             rs = ps.getGeneratedKeys();
 
             if (rs.next()) {
@@ -124,12 +124,13 @@ public class MySQLDatabase {
 
             for (int i = 0; i < lines.length; i++) {
                 ps = conn
-                        .prepareStatement("INSERT INTO `text` (`id`, `text`, `line`) VALUES (?,?,?);");
+                        .prepareStatement("INSERT INTO `text` (`id`, text.text, `line`) VALUES (?,?,?);");
                 ps.setInt(1, id);
                 ps.setString(2, lines[i]);
                 ps.setInt(3, i);
+                ps.executeUpdate();
             }
-            plugin.addSignData(new CommandSignsData(id, loc,
+            HashMaps.addSignData(new CommandSignsData(id, loc,
                     new CommandSignsText(lines)));
         } catch (SQLException e) {
             plugin.logWarning("There was an error add a CommandSign: ");
@@ -157,7 +158,7 @@ public class MySQLDatabase {
             ps.setInt(1, id);
             ps.executeUpdate();
 
-            plugin.removeSignData(id);
+            HashMaps.removeSignData(id);
         } catch (SQLException e) {
             plugin.logWarning("There was an error removing a CommandSign: ");
             e.printStackTrace();

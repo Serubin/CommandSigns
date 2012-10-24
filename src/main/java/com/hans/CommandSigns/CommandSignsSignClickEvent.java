@@ -24,7 +24,7 @@ public class CommandSignsSignClickEvent {
         Player player = event.getPlayer();
         Location location = new Location(sign.getWorld(), sign.getX(),
                 sign.getY(), sign.getZ());
-        CommandSignsPlayerState state = plugin
+        CommandSignsPlayerState state = HashMaps
                 .getPlayerStates(player.getName());
         if (state != null) {
             if (state.equals(CommandSignsPlayerState.ENABLE)) {
@@ -38,11 +38,11 @@ public class CommandSignsSignClickEvent {
             }
             return;
         }
-        if (!plugin.signCheck(location)) {
+        if (!HashMaps.signCheck(location)) {
             return;
         }
         List<String> commandList = parseCommandSign(player,
-                plugin.getSignText(location));
+                HashMaps.getSignText(location));
         if (plugin.hasPermission(player, "CommandSigns.use.regular")) {
             String groupFilter = null;
 
@@ -157,14 +157,14 @@ public class CommandSignsSignClickEvent {
      */
 
     public void enableSign(Player player, Location location) {
-        if (plugin.signCheck(location)) {
+        if (HashMaps.signCheck(location)) {
             player.sendMessage("Sign is already enabled!");
             return;
         }
-        CommandSignsText text = plugin.getPlayerText(player.getName());
+        CommandSignsText text = HashMaps.getPlayerText(player.getName());
         if (plugin.addSign(new CommandSignsData(0, location, text))) {
-            plugin.removePlayerState(player.getName());
-            plugin.removePlayerText(player.getName());
+            HashMaps.removePlayerState(player.getName());
+            HashMaps.removePlayerText(player.getName());
             player.sendMessage("CommandSign enabled");
         } else {
             player.sendMessage(ChatColor.RED
@@ -173,7 +173,7 @@ public class CommandSignsSignClickEvent {
     }
 
     public void readSign(Player player, Location location) {
-        CommandSignsText text = plugin.getSignText(location);
+        CommandSignsText text = HashMaps.getSignText(location);
         if (text == null) {
             player.sendMessage("Sign is not a CommandSign.");
         }
@@ -183,16 +183,16 @@ public class CommandSignsSignClickEvent {
                 player.sendMessage("Line" + i + ": " + lines[i]);
             }
         }
-        plugin.removePlayerState(player.getName());
+        HashMaps.removePlayerState(player.getName());
     }
 
     public void copySign(Player player, Location location) {
         String playerName = player.getName();
-        CommandSignsText text = plugin.getSignText(location);
+        CommandSignsText text = HashMaps.getSignText(location);
         if (text == null) {
             player.sendMessage("Sign is not a CommandSign.");
         }
-        plugin.addPlayerText(playerName, text);
+        HashMaps.addPlayerText(playerName, text);
         String[] lines = text.getText();
         for (int i = 0; i < lines.length; i++) {
             if (lines[i] != null) {
@@ -200,19 +200,19 @@ public class CommandSignsSignClickEvent {
             }
         }
         player.sendMessage("Added to CommandSigns clipboard. Click a sign to enable.");
-        plugin.addPlayerState(playerName, CommandSignsPlayerState.ENABLE);
+        HashMaps.addPlayerState(playerName, CommandSignsPlayerState.ENABLE);
     }
 
     public void disableSign(Player player, Location location) {
-        int id = plugin.getSignId(location);
+        int id = HashMaps.getSignId(location);
         String playerName = player.getName();
-        if (!plugin.signCheck(location)) {
+        if (!HashMaps.signCheck(location)) {
             player.sendMessage("Sign is not enabled!");
-            plugin.removePlayerState(playerName);
+            HashMaps.removePlayerState(playerName);
             return;
         }
-        if (plugin.playerTextContainsKey(playerName)) {
-            plugin.addPlayerState(playerName, CommandSignsPlayerState.ENABLE);
+        if (HashMaps.playerTextContainsKey(playerName)) {
+            HashMaps.addPlayerState(playerName, CommandSignsPlayerState.ENABLE);
             if (plugin.removeSign(id)) {
                 player.sendMessage("Sign disabled. You still have text in your clipboard.");
             } else {
@@ -222,7 +222,7 @@ public class CommandSignsSignClickEvent {
             }
 
         } else {
-            plugin.removePlayerState(playerName);
+            HashMaps.removePlayerState(playerName);
             if (plugin.removeSign(id)) {
                 player.sendMessage("Sign disabled.");
             } else {

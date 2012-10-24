@@ -1,0 +1,5 @@
+mysql:
+  host: "localhost"
+  username: "CommandSigns"
+  password: "change"
+  database: "commandsigns"

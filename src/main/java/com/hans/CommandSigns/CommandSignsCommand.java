@@ -33,7 +33,7 @@ class CommandSignsCommand implements CommandExecutor {
                         return true;
                     }
                     CommandSignsText text;
-                    if ((text = plugin.getPlayerText(playerName)) == null) {
+                    if ((text = HashMaps.getPlayerText(playerName)) == null) {
                         text = new CommandSignsText();
                     }
                     String line = "";
@@ -50,9 +50,9 @@ class CommandSignsCommand implements CommandExecutor {
                         player.sendMessage("You may not make signs with '/*'");
                     }
                     text.setLine(lineNumber, line);
-                    plugin.addPlayerText(playerName, text);
+                    HashMaps.addPlayerText(playerName, text);
                     player.sendMessage("Line " + lineNumber + ": " + line);
-                    plugin.addPlayerState(playerName,
+                    HashMaps.addPlayerState(playerName,
                             CommandSignsPlayerState.ENABLE);
                     player.sendMessage("Ready to add.");
                 }
@@ -60,7 +60,7 @@ class CommandSignsCommand implements CommandExecutor {
                 if (plugin.hasPermission(player, "CommandSigns.create.regular")
                         || plugin.hasPermission(player,
                                 "CommandSigns.create.super")) {
-                    plugin.addPlayerState(playerName,
+                    HashMaps.addPlayerState(playerName,
                             CommandSignsPlayerState.READ);
                     player.sendMessage("Click a sign to read CommandSign text.");
                 }
@@ -68,13 +68,13 @@ class CommandSignsCommand implements CommandExecutor {
                 if (plugin.hasPermission(player, "CommandSigns.create.regular")
                         || plugin.hasPermission(player,
                                 "CommandSigns.create.super")) {
-                    plugin.addPlayerState(playerName,
+                    HashMaps.addPlayerState(playerName,
                             CommandSignsPlayerState.COPY);
                     player.sendMessage("Click a sign to copy CommandSign text.");
                 }
             } else if (args[0].equalsIgnoreCase("remove")) {
                 if (plugin.hasPermission(player, "CommandSigns.remove")) {
-                    plugin.addPlayerState(playerName,
+                    HashMaps.addPlayerState(playerName,
                             CommandSignsPlayerState.DISABLE);
                     player.sendMessage("Click a sign to remove CommandSign.");
                 }
@@ -84,8 +84,8 @@ class CommandSignsCommand implements CommandExecutor {
                                 "CommandSigns.create.regular")
                         || plugin.hasPermission(player,
                                 "CommandSigns.create.super")) {
-                    plugin.removePlayerState(playerName);
-                    plugin.removePlayerText(playerName);
+                    HashMaps.removePlayerState(playerName);
+                    HashMaps.removePlayerText(playerName);
                     player.sendMessage("CommandSign text and status cleared.");
                 }
             } else {

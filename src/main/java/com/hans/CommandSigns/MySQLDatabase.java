@@ -80,8 +80,7 @@ public class MySQLDatabase {
                         .prepareStatement("CREATE TABLE IF NOT EXISTS `text` ( "
                                 + "`id` mediumint(8) unsigned NOT NULL, "
                                 + "`text` varchar(255) NOT NULL, "
-                                + "`line` tinyint(3) NOT NULL, "
-                                + "PRIMARY KEY (`id`)" + ");");
+                                + "`line` tinyint(3) NOT NULL " + ");");
                 ps.executeUpdate();
                 ps.close();
             } else {
@@ -123,12 +122,14 @@ public class MySQLDatabase {
             }
 
             for (int i = 0; i < lines.length; i++) {
-                ps = conn
-                        .prepareStatement("INSERT INTO `text` (`id`, text.text, `line`) VALUES (?,?,?);");
-                ps.setInt(1, id);
-                ps.setString(2, lines[i]);
-                ps.setInt(3, i);
-                ps.executeUpdate();
+                if (lines[i] != null) {
+                    ps = conn
+                            .prepareStatement("INSERT INTO `text` (`id`, text.text, `line`) VALUES (?,?,?);");
+                    ps.setInt(1, id);
+                    ps.setString(2, lines[i]);
+                    ps.setInt(3, i);
+                    ps.executeUpdate();
+                }
             }
             HashMaps.addSignData(new CommandSignsData(id, loc,
                     new CommandSignsText(lines)));

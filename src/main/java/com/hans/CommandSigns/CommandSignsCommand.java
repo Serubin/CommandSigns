@@ -13,7 +13,7 @@ class CommandSignsCommand implements CommandExecutor {
 
     public CommandSignsCommand(CommandSigns plugin) {
         this.plugin = plugin;
-        max_lines = plugin.getConfig().getInt("max-lines");
+        max_lines = plugin.getConfig().getInt("options.max_lines");
     }
 
     public boolean onCommand(CommandSender sender, Command cmd,
@@ -32,8 +32,25 @@ class CommandSignsCommand implements CommandExecutor {
                     try {
                         lineNumber = Integer.parseInt(args[0].substring(4));
                     } catch (NumberFormatException ex) {
-                        player.sendMessage(ChatColor.RED + "Line number invalid!");
+                        player.sendMessage(ChatColor.RED
+                                + "Line number invalid!");
                         return true;
+                    }
+                    if (lineNumber > max_lines) {
+                        player.sendMessage(ChatColor.RED
+                                + "You may not have more then "
+                                + Integer.toString(max_lines)
+                                + "on one CommandSign. This line will not be added!");
+                    }
+                    if (lineNumber > 0) {
+                        if (HashMaps.getPlayerText(player.getName()).getLine(
+                                lineNumber--) == null) {
+                            player.sendMessage(ChatColor.RED
+                                    + "There is no line before line "
+                                    + Integer.toString(lineNumber)
+                                    + ". This line will not be added!");
+                            return true;
+                        }
                     }
                     CommandSignsText text;
                     if ((text = HashMaps.getPlayerText(playerName)) == null) {
@@ -50,7 +67,8 @@ class CommandSignsCommand implements CommandExecutor {
                         while (line.contains("/*")) {
                             line = line.replace("/*", "/");
                         }
-                        player.sendMessage(ChatColor.RED + "You may not make signs with '/*'");
+                        player.sendMessage(ChatColor.RED
+                                + "You may not make signs with '/*'");
                     }
                     text.setLine(lineNumber, line);
                     HashMaps.addPlayerText(playerName, text);
@@ -92,11 +110,11 @@ class CommandSignsCommand implements CommandExecutor {
                     player.sendMessage("CommandSign text and status cleared.");
                 }
             } else {
-                player.sendMessage(ChatColor.RED + "Wrong CommandSigns command syntax.");
+                player.sendMessage(ChatColor.RED
+                        + "Wrong CommandSigns command syntax.");
             }
             return true;
         }
         return false;
     }
-
 }

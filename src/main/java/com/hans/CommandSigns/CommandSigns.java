@@ -1,10 +1,8 @@
 package com.hans.CommandSigns;
 
-import java.util.HashMap;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -14,15 +12,12 @@ public class CommandSigns extends JavaPlugin {
     public final Logger log = Logger.getLogger("Minecraft");
 
     // plugin variables
-    private MySQLDatabase db = null;
+    private MySQLDatabase db;
 
     // listeners
-    private final CommandSignsPlayerListener playerListener = new CommandSignsPlayerListener(
-            this);
-    private CommandSignsCommand commandExecutor = new CommandSignsCommand(this);
-    private final CommandSignsBlockListener blockListener = new CommandSignsBlockListener(
-            this);
-
+    private CommandSignsPlayerListener playerListener;
+    private CommandSignsCommand commandExecutor;
+    private CommandSignsBlockListener blockListener;
     private String version;
     private String name;
     private String tag;
@@ -44,7 +39,9 @@ public class CommandSigns extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         getConfig().options().copyDefaults(true);
         saveConfig();
-
+        playerListener = new CommandSignsPlayerListener(this);
+        commandExecutor = new CommandSignsCommand(this);
+        blockListener = new CommandSignsBlockListener(this);
         db = new MySQLDatabase(this);
 
         getCommand("commandsigns").setExecutor(commandExecutor);
@@ -92,7 +89,6 @@ public class CommandSigns extends JavaPlugin {
             log.info(tag + " DEBUG:" + line);
         }
     }
-
 
     /**
      * Adds data to database

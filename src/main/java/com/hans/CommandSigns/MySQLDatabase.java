@@ -199,11 +199,11 @@ public class MySQLDatabase {
     public boolean removeSign(int id) {
         PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("DELETE FROM `signs` WHERE `id`='?';");
+            ps = conn.prepareStatement("DELETE FROM `signs` WHERE `id`=?;");
             ps.setInt(1, id);
             ps.executeUpdate();
 
-            ps = conn.prepareStatement("DELETE FROM `text` WHERE `id`='?';");
+            ps = conn.prepareStatement("DELETE FROM `text` WHERE `id`=?;");
             ps.setInt(1, id);
             ps.executeUpdate();
 

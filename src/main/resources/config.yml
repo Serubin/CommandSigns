@@ -3,4 +3,5 @@ mysql:
   username: "CommandSigns"
   password: "change"
   database: "commandsigns"
-max-lines: 30
+options: 
+  max_lines: 30

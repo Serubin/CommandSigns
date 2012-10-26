@@ -85,7 +85,7 @@ public class CommandSignsText {
      * @return line of text
      */
     public String getLine(int index) {
-        if (index < 0 || index >= 10) {
+        if (index < 0 || index >= this.text.length) {
             return null;
         }
         return this.text[index];

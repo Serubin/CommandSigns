@@ -5,3 +5,6 @@ mysql:
   database: "commandsigns"
 options: 
   max_lines: 30
+  debug: false;
+  wait:
+    max_time: 15

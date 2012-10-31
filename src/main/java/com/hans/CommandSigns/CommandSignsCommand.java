@@ -40,14 +40,14 @@ class CommandSignsCommand implements CommandExecutor {
                         player.sendMessage(ChatColor.RED
                                 + "You may not have more then "
                                 + Integer.toString(max_lines)
-                                + "on one CommandSign. This line will not be added!");
+                                + " on one CommandSign. This line will not be added!");
                     }
                     if (lineNumber > 0) {
                         if (HashMaps.getPlayerText(player.getName()).getLine(
-                                lineNumber--) == null) {
+                                lineNumber - 1) == null || HashMaps.getPlayerText(player.getName()) == null) {
                             player.sendMessage(ChatColor.RED
                                     + "There is no line before line "
-                                    + Integer.toString(lineNumber++)
+                                    + Integer.toString(lineNumber)
                                     + ". This line will not be added!");
                             return true;
                         }
@@ -108,6 +108,14 @@ class CommandSignsCommand implements CommandExecutor {
                     HashMaps.removePlayerState(playerName);
                     HashMaps.removePlayerText(playerName);
                     player.sendMessage("CommandSign text and status cleared.");
+                }
+            } else if (args[0].equalsIgnoreCase("debug")) {
+                if (plugin.hasPermission(player, "CommandSigns.debug")) {
+                    if (args[1].equalsIgnoreCase("signs")) {
+                        player.sendMessage(HashMaps.activeSignsToString());
+                    } else if (args[1].equalsIgnoreCase("ids")) {
+                        player.sendMessage(HashMaps.activeSignsIdsToString());
+                    }
                 }
             } else {
                 player.sendMessage(ChatColor.RED

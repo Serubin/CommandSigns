@@ -1,13 +1,17 @@
 package com.hans.CommandSigns;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.bukkit.Location;
 
 public class HashMaps {
 
     private final static HashMap<String, CommandSignsPlayerState> playerStates = new HashMap<String, CommandSignsPlayerState>();
-    private final static HashMap<Location, Integer> activeSignIds = new HashMap<Location, Integer>();
+    private final static HashMap<String, Integer> activeSignIds = new HashMap<String, Integer>();
     private final static HashMap<Integer, CommandSignsData> activeSigns = new HashMap<Integer, CommandSignsData>();
     private final static HashMap<String, CommandSignsText> playerText = new HashMap<String, CommandSignsText>();
 
@@ -88,7 +92,7 @@ public class HashMaps {
      * @return Sign id
      */
     public static int getSignId(Location loc) {
-        return activeSignIds.get(loc);
+        return activeSignIds.get(formatLoc(loc));
     }
 
     /**
@@ -110,6 +114,17 @@ public class HashMaps {
      * @return boolean
      */
     public static boolean signCheck(Location loc) {
+        return activeSignIds.containsKey(formatLoc(loc));
+    }
+
+    /**
+     * Checks if commandsigns exists
+     * 
+     * @param loc
+     *            String - Location of commandsign
+     * @return boolean
+     */
+    public static boolean signCheck(String loc) {
         return activeSignIds.containsKey(loc);
     }
 
@@ -142,7 +157,8 @@ public class HashMaps {
      */
     public static void addSignData(CommandSignsData data) {
         activeSigns.put(data.getId(), data);
-        activeSignIds.put(data.getLocation(), data.getId());
+        Location loc = data.getLocation();
+        activeSignIds.put(formatLoc(loc), data.getId());
     }
 
     /**
@@ -154,7 +170,7 @@ public class HashMaps {
      * @param loc
      */
     public static void addSignData(int id, Location loc) {
-        activeSignIds.put(loc, id);
+        activeSignIds.put(formatLoc(loc), id);
     }
 
     /**
@@ -180,12 +196,32 @@ public class HashMaps {
      *            Sign id
      */
     public static void removeSignData(int id) {
-        activeSignIds.remove(activeSigns.get(id).getLocation());
+        activeSignIds.remove(formatLoc(activeSigns.get(id).getLocation()));
         activeSigns.remove(id);
     }
-    
-    public toString(){
-        
+
+    public static String activeSignsToString() {
+        StringBuffer str = new StringBuffer();
+        str.append("Active sign data: [");
+        for (CommandSignsData data : activeSigns.values()) {
+            str.append(data.toString() + ", ");
+        }
+        str.append("]");
+        return str.toString();
     }
 
+    public static String activeSignsIdsToString() {
+        StringBuffer str = new StringBuffer();
+        str.append("Active sign ids: [");
+        for (Entry<String, Integer> entry : activeSignIds.entrySet()) {
+            str.append("[" + entry.getKey() + ", " + entry.getValue() + "], ");
+        }
+        str.append("]");
+        return str.toString();
+    }
+
+    private static String formatLoc(Location loc) {
+        return loc.getWorld() + ":" + loc.getBlockX() + ":" + loc.getBlockY()
+                + ":" + loc.getBlockZ();
+    }
 }

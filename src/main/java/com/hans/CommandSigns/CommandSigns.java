@@ -39,6 +39,10 @@ public class CommandSigns extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         getConfig().options().copyDefaults(true);
         saveConfig();
+        debug = getConfig().getBoolean("options.debug");
+        if (debug) {
+            log.info("Debug is true");
+        }
         playerListener = new CommandSignsPlayerListener(this);
         commandExecutor = new CommandSignsCommand(this);
         blockListener = new CommandSignsBlockListener(this);

@@ -24,8 +24,8 @@ public class CommandSignsSignClickEvent {
         Player player = event.getPlayer();
         Location location = new Location(sign.getWorld(), sign.getX(),
                 sign.getY(), sign.getZ());
-        CommandSignsPlayerState state = HashMaps
-                .getPlayerStates(player.getName());
+        CommandSignsPlayerState state = HashMaps.getPlayerStates(player
+                .getName());
         if (state != null) {
             if (state.equals(CommandSignsPlayerState.ENABLE)) {
                 enableSign(player, location);
@@ -39,8 +39,10 @@ public class CommandSignsSignClickEvent {
             return;
         }
         if (!HashMaps.signCheck(location)) {
+            plugin.logDebug("No command sign found at " + location.toString());
             return;
         }
+        plugin.logDebug(HashMaps.getSignText(location).toString());
         List<String> commandList = parseCommandSign(player,
                 HashMaps.getSignText(location));
         if (plugin.hasPermission(player, "CommandSigns.use.regular")) {

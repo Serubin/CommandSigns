@@ -96,8 +96,12 @@ public class MySQLDatabase {
     }
 
     private boolean loadData() {
+        // For Signs
         PreparedStatement ps = null;
         ResultSet rs = null;
+        // For text
+        PreparedStatement psText = null;
+        ResultSet rsText = null;
         int id = 0;
         int ErrorLoad = 0;
         try {
@@ -109,13 +113,18 @@ public class MySQLDatabase {
                 int x = rs.getInt(3);
                 int y = rs.getInt(4);
                 int z = rs.getInt(5);
+                plugin.logDebug("Getting sign id: " + Integer.toString(id)
+                        + ", " + worldStr + ", " + Integer.toString(x) + ", "
+                        + Integer.toString(y) + ", " + Integer.toString(z));
                 // Gets text
-                ps = conn
-                        .prepareStatement("SELECT * FROM `text` WHERE `id`='?' ORDER BY `line` ASC;");
-                rs = ps.executeQuery();
+                psText = conn
+                        .prepareStatement("SELECT * FROM `text` WHERE `id`=? ORDER BY `line` ASC;");
+                psText.setInt(1, id);
+                rsText = psText.executeQuery();
                 ArrayList<String> list = new ArrayList<String>();
-                while (rs.next()) {
-                    list.add(rs.getString(2));
+                while (rsText.next()) {
+                    list.add(rsText.getString(2));
+                    plugin.logDebug(Integer.toString(id) + rsText.getString(2));
                 }
                 // Checks for valid world
                 World world = plugin.getServer().getWorld(worldStr);
@@ -123,6 +132,9 @@ public class MySQLDatabase {
                     HashMaps.addSignData(new CommandSignsData(id, new Location(
                             world, x, y, z), new CommandSignsText(list
                             .toArray(new String[list.size()]))));
+                    plugin.logDebug("Sign added: "
+                            + new Location(world, x, y, z).toString()
+                            + "with id: " + Integer.toString(id));
                 } else {
                     ErrorLoad++;
                 }
@@ -168,7 +180,6 @@ public class MySQLDatabase {
             if (rs.next()) {
                 id = rs.getInt(1);
             }
-
             for (int i = 0; i < lines.length; i++) {
                 if (lines[i] != null) {
                     ps = conn
@@ -181,6 +192,8 @@ public class MySQLDatabase {
             }
             HashMaps.addSignData(new CommandSignsData(id, loc,
                     new CommandSignsText(lines)));
+            plugin.logDebug("Sign added: " + loc.toString() + "with id: "
+                    + Integer.toString(id));
         } catch (SQLException e) {
             plugin.logWarning("There was an error add a CommandSign: ");
             e.printStackTrace();

@@ -70,4 +70,10 @@ public class CommandSignsData {
     public void setText(int index, String line) {
         this.text.setLine(index, line);
     }
+
+    public String toString() {
+        return "[" + Integer.toString(id) + ", " + loc.toString() + ", "
+                + text.toString() + "]";
+
+    }
 }

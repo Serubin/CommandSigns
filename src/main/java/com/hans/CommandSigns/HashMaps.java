@@ -183,5 +183,9 @@ public class HashMaps {
         activeSignIds.remove(activeSigns.get(id).getLocation());
         activeSigns.remove(id);
     }
+    
+    public toString(){
+        
+    }
 
 }

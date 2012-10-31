@@ -47,7 +47,7 @@ class CommandSignsCommand implements CommandExecutor {
                                 lineNumber--) == null) {
                             player.sendMessage(ChatColor.RED
                                     + "There is no line before line "
-                                    + Integer.toString(lineNumber)
+                                    + Integer.toString(lineNumber++)
                                     + ". This line will not be added!");
                             return true;
                         }

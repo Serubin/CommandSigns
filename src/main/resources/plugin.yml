@@ -6,7 +6,7 @@ description: >
              Add commands to signs.
 commands:
   commandsigns:
-    aliases:
+    aliases: [cmds]
     description: CommandSigns commands.
     usage: |
         /commandsigns line<number> - Add a line to your CommandSign clipboard. Right click a sign to activate.

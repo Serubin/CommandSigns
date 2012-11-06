@@ -49,6 +49,7 @@ public class CommandSigns extends JavaPlugin {
         db = new MySQLDatabase(this);
 
         getCommand("commandsigns").setExecutor(commandExecutor);
+        getCommand("cmds").setExecutor(commandExecutor);
 
         pm.registerEvents(this.playerListener, this);
         pm.registerEvents(this.blockListener, this);

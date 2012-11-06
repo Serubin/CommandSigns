@@ -1,7 +1,6 @@
 package com.hans.CommandSigns;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -22,8 +21,12 @@ public class CommandSignsBlockListener implements Listener {
             return;
         }
         Block block = event.getBlock();
-        if (block.getType() == Material.SIGN_POST
-                || block.getType() == Material.WALL_SIGN) {
+        if ( block.getType()==Material.WALL_SIGN ||
+                block.getType()==Material.SIGN_POST ||
+                block.getType()==Material.STONE_PLATE  ||
+                block.getType()==Material.WOOD_PLATE ||
+                block.getType()==Material.STONE_BUTTON ||
+                block.getType()==Material.LEVER) {
 
             if (HashMaps.signCheck(block.getLocation())) {
                 event.getPlayer().sendMessage(

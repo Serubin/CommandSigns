@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.block.Sign;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.permissions.PermissionAttachment;
@@ -20,7 +20,7 @@ public class CommandSignsSignClickEvent {
         plugin = instance;
     }
 
-    public void onRightClick(PlayerInteractEvent event, Sign sign) {
+    public void onRightClick(PlayerInteractEvent event, Block sign) {
         Player player = event.getPlayer();
         Location location = new Location(sign.getWorld(), sign.getX(),
                 sign.getY(), sign.getZ());

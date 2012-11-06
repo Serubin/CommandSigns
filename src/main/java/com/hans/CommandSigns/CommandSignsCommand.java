@@ -18,7 +18,8 @@ class CommandSignsCommand implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd,
             String commandLabel, String[] args) {
-        if (commandLabel.equalsIgnoreCase("commandsigns")) {
+        if (commandLabel.equalsIgnoreCase("commandsigns")
+                || commandLabel.equalsIgnoreCase("cmds")) {
             if (args.length < 1) {
                 return true;
             }
@@ -44,7 +45,8 @@ class CommandSignsCommand implements CommandExecutor {
                     }
                     if (lineNumber > 0) {
                         if (HashMaps.getPlayerText(player.getName()).getLine(
-                                lineNumber - 1) == null || HashMaps.getPlayerText(player.getName()) == null) {
+                                lineNumber - 1) == null
+                                || HashMaps.getPlayerText(player.getName()) == null) {
                             player.sendMessage(ChatColor.RED
                                     + "There is no line before line "
                                     + Integer.toString(lineNumber)

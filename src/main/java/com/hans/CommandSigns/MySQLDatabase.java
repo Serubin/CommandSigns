@@ -151,7 +151,7 @@ public class MySQLDatabase {
         }
         return true;
     }
-
+//TODO add edit
     /**
      * Adds sign to database and hashmaps
      * 

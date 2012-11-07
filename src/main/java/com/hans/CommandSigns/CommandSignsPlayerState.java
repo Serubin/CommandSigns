@@ -4,7 +4,8 @@ public enum CommandSignsPlayerState {
 	ENABLE(0),
 	DISABLE(1),
 	READ(2),
-	COPY(3);
+	COPY(3),
+	EDIT(4);
 	
 	private final int id;
 	

@@ -76,6 +76,19 @@ class CommandSignsCommand implements CommandExecutor {
                             CommandSignsPlayerState.ENABLE);
                     player.sendMessage("Ready to add.");
                 }
+
+            } else if (args[0].equalsIgnoreCase("name")) {
+                if (plugin.hasPermission(player, "CommandSigns.create.regular")
+                        || plugin.hasPermission(player,
+                                "CommandSigns.create.super")) {
+                    HashMaps.setSignName(playerName, args[1]);
+                    player.sendMessage("Name: " + args[1]);
+                    if (HashMaps.getPlayerStates(playerName) == CommandSignsPlayerState.ENABLE) {
+                        player.sendMessage("Ready to add.");
+                    } else {
+                        player.sendMessage("Add commands before adding to sign");
+                    }
+                }
             } else if (args[0].equalsIgnoreCase("read")) {
                 if (plugin.hasPermission(player, "CommandSigns.create.regular")
                         || plugin.hasPermission(player,
@@ -146,7 +159,7 @@ class CommandSignsCommand implements CommandExecutor {
                             temp[temp.length] = line;
                             data = new CommandSignsText(temp);
                         }
-                        
+
                         HashMaps.setTextEdit(player.getName(), data.getText());
                         player.sendMessage("Line " + lineNumber + ": " + line);
                         player.sendMessage("Right click the sign to update");

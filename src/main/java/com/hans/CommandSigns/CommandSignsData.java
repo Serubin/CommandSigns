@@ -4,6 +4,7 @@ import org.bukkit.Location;
 
 public class CommandSignsData {
     private int id;
+    private String name;
     private Location loc;
     private CommandSignsText text;
 
@@ -34,8 +35,7 @@ public class CommandSignsData {
     /**
      * Set location
      * 
-     * @param loc
-     *            Location
+     * @param loc Location
      */
     public void setWorld(Location loc) {
         this.loc = loc;
@@ -53,8 +53,7 @@ public class CommandSignsData {
     /**
      * Sets text from array
      * 
-     * @param lines
-     *            Array of text
+     * @param lines Array of text
      */
     public void setText(String[] lines) {
         this.text.setLine(lines);
@@ -64,16 +63,33 @@ public class CommandSignsData {
      * Sets text from index
      * 
      * @param index
-     * @param line
-     *            text
+     * @param line text
      */
     public void setText(int index, String line) {
         this.text.setLine(index, line);
     }
 
+    /**
+     * Returns sign's name
+     * 
+     * @return name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the name of the sign
+     * 
+     * @param name Sign name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String toString() {
-        return "[" + Integer.toString(id) + ", " + loc.toString() + ", "
-                + text.toString() + "]";
+        return "[" + name + ", " + Integer.toString(id) + ", " + loc.toString()
+                + ", " + text.toString() + "]";
 
     }
 }

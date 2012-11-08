@@ -164,13 +164,18 @@ public class CommandSignsSignClickEvent {
 
     public void enableSign(Player player, Location location) {
         if (HashMaps.signCheck(location)) {
-            player.sendMessage("Sign is already enabled!");
+            player.sendMessage(ChatColor.RED + "Sign is already enabled!");
+            return;
+        }
+        if (!HashMaps.checkPlayerText(player.getName())) {
+            player.sendMessage(ChatColor.RED + "You have no commands to add!");
             return;
         }
         CommandSignsText text = HashMaps.getPlayerText(player.getName());
         if (plugin.addSign(new CommandSignsData(0, location, text))) {
             HashMaps.removePlayerState(player.getName());
             HashMaps.removePlayerText(player.getName());
+            HashMaps.removeSignName(player.getName());
             player.sendMessage("CommandSign enabled");
         } else {
             player.sendMessage(ChatColor.RED

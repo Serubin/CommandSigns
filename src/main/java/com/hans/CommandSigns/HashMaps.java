@@ -14,6 +14,7 @@ public class HashMaps {
     private final static HashMap<String, Integer> activeSignIds = new HashMap<String, Integer>();
     private final static HashMap<Integer, CommandSignsData> activeSigns = new HashMap<Integer, CommandSignsData>();
     private final static HashMap<String, CommandSignsText> playerText = new HashMap<String, CommandSignsText>();
+    private final static HashMap<String, String> playerSignNames = new HashMap<String, String>();
     private final static HashMap<String, CommandSignsData> signEdit = new HashMap<String, CommandSignsData>();
 
     /**
@@ -44,6 +45,16 @@ public class HashMaps {
      */
     public static void removePlayerState(String player) {
         playerStates.remove(player);
+    }
+
+    /**
+     * Check if player text exists
+     * 
+     * @param player
+     * @return boolean
+     */
+    public static boolean checkPlayerText(String player) {
+        return playerText.containsKey(player);
     }
 
     /**
@@ -282,6 +293,35 @@ public class HashMaps {
     public static void updateText(String player) {
         playerStates.remove(player);
         signEdit.remove(player);
+    }
+
+    /**
+     * Get sign named to be added to data
+     * 
+     * @param player
+     * @return Sign name
+     */
+    public static String getSignName(String player) {
+        return playerSignNames.get(player);
+    }
+
+    /**
+     * Set sign name to be added
+     * 
+     * @param player Player name
+     * @param name Sign name
+     */
+    public static void setSignName(String player, String name) {
+        playerSignNames.put(player, name);
+    }
+
+    /**
+     * Remove sign name from player
+     * 
+     * @param player
+     */
+    public static void removeSignName(String player) {
+        playerSignNames.remove(player);
     }
 
     /**

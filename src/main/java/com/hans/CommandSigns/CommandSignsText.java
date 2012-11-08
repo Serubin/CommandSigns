@@ -7,8 +7,7 @@ public class CommandSignsText {
     /**
      * Initializes and sets text to null until set.
      * 
-     * @param index
-     *            Length of signs
+     * @param index Length of signs
      * 
      */
     public CommandSignsText(int index) {
@@ -21,8 +20,7 @@ public class CommandSignsText {
     /**
      * Initializes and sets text from array
      * 
-     * @param lines
-     *            array of text
+     * @param lines array of text
      */
     public CommandSignsText(String[] lines) {
         text = new String[lines.length];
@@ -32,10 +30,8 @@ public class CommandSignsText {
     /**
      * Initializes and sets text from lines. remaining items are set to null
      * 
-     * @param index
-     *            Max amount of lines
-     * @param lines
-     *            Lines
+     * @param index Max amount of lines
+     * @param lines Lines
      */
     public CommandSignsText(int index, String[] lines) {
         if (index < lines.length) {
@@ -80,8 +76,7 @@ public class CommandSignsText {
     /**
      * Gets line of text from index
      * 
-     * @param index
-     *            line to be returned
+     * @param index line to be returned
      * @return line of text
      */
     public String getLine(int index) {
@@ -94,10 +89,8 @@ public class CommandSignsText {
     /**
      * Sets a specific line's text
      * 
-     * @param index
-     *            The line to be changed
-     * @param line
-     *            The line of text
+     * @param index The line to be changed
+     * @param line The line of text
      * @return boolean
      */
     public boolean setLine(int index, String line) {
@@ -111,8 +104,7 @@ public class CommandSignsText {
     /**
      * Sets the entire text array
      * 
-     * @param lines
-     *            Array of text to be set
+     * @param lines Array of text to be set
      * @return boolean
      */
     public boolean setLine(String[] lines) {
@@ -120,4 +112,12 @@ public class CommandSignsText {
         return true;
     }
 
+    /**
+     * Gets the amount of lines
+     * 
+     * @return length
+     */
+    public int length() {
+        return this.text.length;
+    }
 }

@@ -151,14 +151,13 @@ public class MySQLDatabase {
         }
         return true;
     }
-//TODO add edit
+
+    // TODO add edit
     /**
      * Adds sign to database and hashmaps
      * 
-     * @param loc
-     *            Location of sign
-     * @param lines
-     *            Lines to be added
+     * @param loc Location of sign
+     * @param lines Lines to be added
      * @return boolean if errored
      */
     public boolean addSign(Location loc, String[] lines) {
@@ -205,8 +204,7 @@ public class MySQLDatabase {
     /**
      * Removes CommandSign from Database
      * 
-     * @param id
-     *            CommandSign id
+     * @param id CommandSign id
      * @return boolean if errored
      */
     public boolean removeSign(int id) {
@@ -228,5 +226,34 @@ public class MySQLDatabase {
         }
 
         return true;
+    }
+
+    public boolean editSignText(int id, CommandSignsData data, String player) {
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("DELETE FROM `text` WHERE `id`=?;");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+            String[] lines = data.getText().getText();
+
+            for (int i = 0; i < lines.length; i++) {
+                if (lines[i] != null) {
+                    ps = conn
+                            .prepareStatement("INSERT INTO `text` (`id`, text.text, `line`) VALUES (?,?,?);");
+                    ps.setInt(1, id);
+                    ps.setString(2, lines[i]);
+                    ps.setInt(3, i);
+                    ps.executeUpdate();
+                }
+            }
+
+            HashMaps.updateText(player);
+            return true;
+        } catch (SQLException e) {
+            plugin.logWarning("There was an error updating a CommandSign: ");
+            e.printStackTrace();
+            return false;
+        }
     }
 }

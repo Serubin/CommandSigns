@@ -66,8 +66,7 @@ public class CommandSigns extends JavaPlugin {
     /**
      * Logs with plugin tag at info level
      * 
-     * @param line
-     *            of text
+     * @param line of text
      */
     public void logInfo(String line) {
         log.info(tag + line);
@@ -76,8 +75,7 @@ public class CommandSigns extends JavaPlugin {
     /**
      * Logs with plugin tag at warning level
      * 
-     * @param line
-     *            of text
+     * @param line of text
      */
     public void logWarning(String line) {
         log.warning(tag + line);
@@ -86,8 +84,7 @@ public class CommandSigns extends JavaPlugin {
     /**
      * logs with debug tag
      * 
-     * @param line
-     *            of text
+     * @param line of text
      */
     public void logDebug(String line) {
         if (debug) {
@@ -98,8 +95,7 @@ public class CommandSigns extends JavaPlugin {
     /**
      * Adds data to database
      * 
-     * @param data
-     *            CommandSignsData object
+     * @param data CommandSignsData object
      */
     public boolean addSign(CommandSignsData data) {
         if (db.addSign(data.getLocation(), data.getText().getText()))
@@ -111,11 +107,18 @@ public class CommandSigns extends JavaPlugin {
     /**
      * Removes data from database
      * 
-     * @param id
-     *            Of commandsign
+     * @param id Of commandsign
      */
     public boolean removeSign(int id) {
         if (db.removeSign(id))
+            return true;
+        else
+            return false;
+    }
+
+    public boolean updateSign(String player) {
+        CommandSignsData data = HashMaps.getEditData(player);
+        if (db.editSignText(data.getId(), data, player))
             return true;
         else
             return false;

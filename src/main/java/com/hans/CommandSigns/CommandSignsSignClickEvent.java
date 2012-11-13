@@ -247,6 +247,7 @@ public class CommandSignsSignClickEvent {
         if (HashMaps.comfirmEdit(player.getName())) {
             if (HashMaps.getEditLoc(player.getName()).equals(loc)) {
                 plugin.updateSign(player.getName());
+                return;
             }
         }
         HashMaps.initEdit(player.getName(), loc);

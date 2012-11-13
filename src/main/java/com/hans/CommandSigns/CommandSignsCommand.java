@@ -124,8 +124,8 @@ class CommandSignsCommand implements CommandExecutor {
                 // TODO add edit command
             } else if (args[0].equalsIgnoreCase("edit")) {
                 if (plugin.hasPermission(player, "CommandSigns.edit")) {
-                    HashMaps.addPlayerState(playerName,
-                            CommandSignsPlayerState.EDIT);
+                        HashMaps.addPlayerState(playerName,
+                                CommandSignsPlayerState.EDIT);
                     if (HashMaps.getPlayerStates(playerName) == CommandSignsPlayerState.EDIT
                             && HashMaps.comfirmEdit(playerName)) {
                         int lineNumber;
@@ -133,7 +133,7 @@ class CommandSignsCommand implements CommandExecutor {
                         CommandSignsText data = HashMaps.getEditText(player
                                 .getName());
                         try {
-                            lineNumber = Integer.parseInt(args[0].substring(4));
+                            lineNumber = Integer.parseInt(args[1].substring(4));
                         } catch (NumberFormatException ex) {
                             player.sendMessage(ChatColor.RED
                                     + "Line number invalid!");
@@ -146,7 +146,8 @@ class CommandSignsCommand implements CommandExecutor {
                                     + " on one CommandSign. This line will not be added!");
                             return true;
                         }
-                        if (data.getText()[lineNumber - 1] == null) {
+                        if (lineNumber != 0
+                                || data.getText()[lineNumber - 1] == null) {
                             player.sendMessage(ChatColor.RED
                                     + "There is no line before line "
                                     + Integer.toString(lineNumber)
@@ -187,8 +188,10 @@ class CommandSignsCommand implements CommandExecutor {
     /**
      * get line from args, removing unused peices.
      * 
-     * @param args Sting[] of args
-     * @param index where to start
+     * @param args
+     *            Sting[] of args
+     * @param index
+     *            where to start
      * @return line
      */
     private String getLine(String[] args, int index) {

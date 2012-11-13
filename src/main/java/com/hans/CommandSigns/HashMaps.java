@@ -360,7 +360,7 @@ public class HashMaps {
      * @param loc
      * @return String of loc
      */
-    private static String formatLoc(Location loc) {
+    public static String formatLoc(Location loc) {
         return loc.getWorld() + ":" + loc.getBlockX() + ":" + loc.getBlockY()
                 + ":" + loc.getBlockZ();
     }

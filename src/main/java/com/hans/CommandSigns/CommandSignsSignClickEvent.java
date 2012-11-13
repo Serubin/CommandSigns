@@ -243,11 +243,13 @@ public class CommandSignsSignClickEvent {
         }
     }
 
-    public void editSign(Player player, Location loc) {
+    public boolean editSign(Player player, Location loc) {
         if (HashMaps.comfirmEdit(player.getName())) {
-            if (HashMaps.getEditLoc(player.getName()).equals(loc)) {
+            if (HashMaps.getEditLoc(player.getName()).equals(
+                    HashMaps.formatLoc(loc))) {
                 plugin.updateSign(player.getName());
-                return;
+                player.sendMessage("Sign Updated");
+                return true;
             }
         }
         HashMaps.initEdit(player.getName(), loc);
@@ -258,5 +260,6 @@ public class CommandSignsSignClickEvent {
                 player.sendMessage("Line" + i + ": " + lines[i]);
             }
         }
+        return true;
     }
 }

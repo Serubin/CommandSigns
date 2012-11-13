@@ -124,8 +124,15 @@ class CommandSignsCommand implements CommandExecutor {
                 // TODO add edit command
             } else if (args[0].equalsIgnoreCase("edit")) {
                 if (plugin.hasPermission(player, "CommandSigns.edit")) {
-                        HashMaps.addPlayerState(playerName,
-                                CommandSignsPlayerState.EDIT);
+                    if (args.length == 1) {
+                        if (HashMaps.getPlayerStates(player.getName()) != CommandSignsPlayerState.EDIT) {
+                            HashMaps.addPlayerState(playerName,
+                                    CommandSignsPlayerState.EDIT);
+                            player.sendMessage("Click the sign you wish to edit.");
+                        }
+                        return true;
+                    }
+
                     if (HashMaps.getPlayerStates(playerName) == CommandSignsPlayerState.EDIT
                             && HashMaps.comfirmEdit(playerName)) {
                         int lineNumber;
@@ -146,25 +153,27 @@ class CommandSignsCommand implements CommandExecutor {
                                     + " on one CommandSign. This line will not be added!");
                             return true;
                         }
-                        if (lineNumber != 0
-                                || data.getText()[lineNumber - 1] == null) {
-                            player.sendMessage(ChatColor.RED
-                                    + "There is no line before line "
-                                    + Integer.toString(lineNumber)
-                                    + ". This line will not be added!");
-                            return false;
+                        if (lineNumber != 0) {
+                            if (data.getText()[lineNumber - 1] == null) {
+                                player.sendMessage(ChatColor.RED
+                                        + "There is no line before line "
+                                        + Integer.toString(lineNumber)
+                                        + ". This line will not be added!");
+                                return false;
+                            }
                         }
-
-                        if (lineNumber > data.length()) {
-                            String[] temp = data.getText();
-                            temp[temp.length] = line;
-                            data = new CommandSignsText(temp);
-                        }
+                        // Add data to hashmap
+                        player.sendMessage("Updating line text");
+                        String[] temp = data.getText();
+                        temp[lineNumber] = line;
+                        data = new CommandSignsText(temp);
 
                         HashMaps.setTextEdit(player.getName(), data.getText());
                         player.sendMessage("Line " + lineNumber + ": " + line);
                         player.sendMessage("Right click the sign to update");
                         // TODO set new text
+                    } else {
+                        player.sendMessage("You are not currently editing a sign.");
                     }
                 }
 

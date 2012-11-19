@@ -194,20 +194,34 @@ class CommandSignsCommand implements CommandExecutor {
         return false;
     }
 
-    /**
-     * get line from args, removing unused peices.
+    /*
+     * /** get line from args, removing unused peices.
      * 
-     * @param args
-     *            Sting[] of args
+     * @param args Sting[] of args
+     * 
+     * @param index where to start
+     * 
+     * @return line
+     * 
+     * private String getLine(String[] args, int index) { String line = ""; for
+     * (int i = index; i < args.length; i++) { line = line.concat(args[i] + ((i
+     * != (args.length - index)) ? " " : "")); } return line; }
+     */
+    /**
+     * Gets line from args, removes unused pieces
+     * 
+     * @param args Arguments from commands
      * @param index
-     *            where to start
      * @return line
      */
-    private String getLine(String[] args, int index) {
-        String line = "";
+    public static String getLine(String[] args, int index) {
+        String[] argNew = new String[args.length - index];
         for (int i = index; i < args.length; i++) {
-            line = line.concat(args[i]
-                    + ((i != (args.length - index)) ? " " : ""));
+            argNew[i - index] = args[i];
+        }
+        String line = null;
+        for (int i = 0; i < args.length; i++) {
+            line = line.concat(argNew[i] + " ");
         }
         return line;
     }

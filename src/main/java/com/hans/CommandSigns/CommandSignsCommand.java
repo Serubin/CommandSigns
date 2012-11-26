@@ -165,7 +165,21 @@ class CommandSignsCommand implements CommandExecutor {
                         // Add data to hashmap
                         player.sendMessage("Updating line text");
                         String[] temp = data.getText();
+                        if (temp.length < lineNumber) {
+                            String[] tempNew = temp.clone();
+                            temp = new String[lineNumber + 2];
+                            for (int i = 0; i < temp.length; i++) {
+                                if (tempNew[i] != null)
+                                    temp[i] = tempNew[i];
+                                else
+                                    temp[i] = "";
+                            }
+                        }
+                        plugin.logDebug("LineNumber " + lineNumber
+                                + " Temp length " + temp.length);
                         temp[lineNumber] = line;
+                        plugin.logDebug("LineNumber " + lineNumber
+                                + " Temp length " + temp.length);
                         data = new CommandSignsText(temp);
 
                         HashMaps.setTextEdit(player.getName(), data.getText());
@@ -219,9 +233,9 @@ class CommandSignsCommand implements CommandExecutor {
         for (int i = index; i < args.length; i++) {
             argNew[i - index] = args[i];
         }
-        String line = null;
-        for (int i = 0; i < args.length; i++) {
-            line = line.concat(argNew[i] + " ");
+        String line = "";
+        for (int i = 0; i < argNew.length; i++) {
+            line = line + argNew[i] + " ";
         }
         return line;
     }

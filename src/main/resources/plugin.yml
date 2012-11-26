@@ -8,12 +8,7 @@ commands:
   commandsigns:
     aliases: [cmds]
     description: CommandSigns commands.
-    usage: |
-        /commandsigns line<number> - Add a line to your CommandSign clipboard. Right click a sign to activate.
-        /commandsigns read - Right click a sign to read the CommandSign text.
-        /commandsigns copy - Copy a CommandSigns to your clipboard.
-        /commandsigns remove - Right click a sign to remove a CommandSign.
-        /commandsigns clear - Clear your CommandSign clipboard.
+    usage: Type /<command> ? for help
 permissions:
     CommandSigns.*:
         description: Gives access to all CommandSigns commands

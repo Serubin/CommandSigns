@@ -21,10 +21,52 @@ class CommandSignsCommand implements CommandExecutor {
         if (commandLabel.equalsIgnoreCase("commandsigns")
                 || commandLabel.equalsIgnoreCase("cmds")) {
             if (args.length < 1) {
-                return true;
+                return false;
             }
             Player player = (Player) sender;
             String playerName = player.getName();
+            if (args[0].equalsIgnoreCase("?")) {
+                if (args.length == 1) {
+                    player.sendMessage("General Help:");
+                    player.sendMessage(ChatColor.GRAY
+                            + "/"
+                            + commandLabel
+                            + " line<number>"
+                            + ChatColor.WHITE
+                            + " - Add a line to your CommandSign clipboard. Right click a sign to activate.");
+                    player.sendMessage(ChatColor.GRAY
+                            + "/"
+                            + commandLabel
+                            + " read"
+                            + ChatColor.WHITE
+                            + " - Right click a sign to read the CommandSign text.");
+                    player.sendMessage(ChatColor.GRAY + "/" + commandLabel
+                            + " copy" + ChatColor.WHITE
+                            + " - Copy a CommandSigns to your clipboard.");
+                    player.sendMessage(ChatColor.GRAY + "/" + commandLabel
+                            + " remove " + ChatColor.WHITE
+                            + "- Right click a sign to remove a CommandSign.");
+                    player.sendMessage(ChatColor.GRAY + "/" + commandLabel
+                            + " clear" + ChatColor.WHITE
+                            + " - Clear your CommandSign clipboard.");
+                    player.sendMessage("Type" + ChatColor.GRAY + " /"
+                            + commandLabel + " ? edit" + ChatColor.WHITE
+                            + " to learn more about editing.");
+
+                } else if (args[1].equalsIgnoreCase("edit")) {
+                    player.sendMessage("Edit help:");
+                    player.sendMessage(ChatColor.GRAY + "/" + commandLabel
+                            + " edit" + ChatColor.WHITE
+                            + " - Select a Commandsign to edit");
+                    player.sendMessage(ChatColor.GRAY + "/" + commandLabel
+                            + " edit line<number>" + ChatColor.WHITE
+                            + " - Edit line from CommandSign");
+                    player.sendMessage(ChatColor.GRAY + "/" + commandLabel
+                            + " edit cancel" + ChatColor.WHITE
+                            + " - Cancel a Commandsign in edit");
+                }
+                return true;
+            }
             if (args[0].indexOf("line") == 0) {
                 if (plugin.hasPermission(player, "CommandSigns.create.regular")
                         || plugin.hasPermission(player,
@@ -35,6 +77,11 @@ class CommandSignsCommand implements CommandExecutor {
                     } catch (NumberFormatException ex) {
                         player.sendMessage(ChatColor.RED
                                 + "Line number invalid!");
+                        return true;
+                    }
+                    if (HashMaps.checkPlayerText(player.getName())) {
+                        player.sendMessage(ChatColor.RED
+                                + "You are not currently editing a sign!");
                         return true;
                     }
                     if (lineNumber > max_lines) {
@@ -139,6 +186,11 @@ class CommandSignsCommand implements CommandExecutor {
                         String line = getLine(args, 2);
                         CommandSignsText data = HashMaps.getEditText(player
                                 .getName());
+                        // Cancels edit
+                        if (args[1].equalsIgnoreCase("cancel")) {
+                            HashMaps.removePlayerState(playerName);
+                        }
+
                         try {
                             lineNumber = Integer.parseInt(args[1].substring(4));
                         } catch (NumberFormatException ex) {
@@ -162,24 +214,28 @@ class CommandSignsCommand implements CommandExecutor {
                                 return false;
                             }
                         }
+
                         // Add data to hashmap
                         player.sendMessage("Updating line text");
                         String[] temp = data.getText();
-                        if (temp.length < lineNumber) {
+                        if (temp.length < (lineNumber + 1)) {
                             String[] tempNew = temp.clone();
                             temp = new String[lineNumber + 2];
+                            plugin.logDebug(Integer.toString(temp.length));
                             for (int i = 0; i < temp.length; i++) {
-                                if (tempNew[i] != null)
-                                    temp[i] = tempNew[i];
+                                if (i < temp.length)
+                                    if (temp[i] != null)
+                                        temp[i] = tempNew[i];
+                                    else
+                                        temp[i] = "";
                                 else
                                     temp[i] = "";
                             }
                         }
+
                         plugin.logDebug("LineNumber " + lineNumber
                                 + " Temp length " + temp.length);
                         temp[lineNumber] = line;
-                        plugin.logDebug("LineNumber " + lineNumber
-                                + " Temp length " + temp.length);
                         data = new CommandSignsText(temp);
 
                         HashMaps.setTextEdit(player.getName(), data.getText());

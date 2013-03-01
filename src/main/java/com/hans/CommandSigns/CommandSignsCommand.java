@@ -253,6 +253,11 @@ class CommandSignsCommand implements CommandExecutor {
                         player.sendMessage(HashMaps.activeSignsToString());
                     } else if (args[1].equalsIgnoreCase("ids")) {
                         player.sendMessage(HashMaps.activeSignsIdsToString());
+                    } else if(args[1].equalsIgnoreCase("migrate")){
+                        CommandSignsMigrate csm = new CommandSignsMigrate(plugin);
+                        if(args.length == 3){
+                            csm.loadData(args[2]);
+                        }  
                     }
                 }
             } else {

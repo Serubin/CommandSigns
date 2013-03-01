@@ -40,7 +40,10 @@ public class CommandSignsMigrate {
             int lineNumber = 0;
             while (line != null) {
                 String[] sign = line.split(",");
-                String[] lines = sign[3].split("[LINEBREAK]");
+                String[] lines = sign[2].split("\\[LINEBREAK]");
+                for(String str:lines){
+                    log.info(str);
+                }
                 // Processes coords
                 String[] coordString = sign[1].split(":");
                 double[] coord = new double[coordString.length];
@@ -54,12 +57,23 @@ public class CommandSignsMigrate {
                 World world = plugin.getServer().getWorld(sign[0]);
                 lineNumber++;
                 if (world != null) {
-                    Location loc = new Location(world, coord[0], coord[2],
-                            coord[3]);
-                    plugin.addSign(new CommandSignsData(0, loc,
-                            new CommandSignsText(lines)));
+                    Location loc = new Location(world, coord[0], coord[1],
+                            coord[2]);
+                    if (!HashMaps.signCheck(loc)) {
+                        plugin.addSign(new CommandSignsData(0, loc,
+                                new CommandSignsText(lines)));
+                    } else {
+                        log.warning("There was a problem loading line number "
+                                + Integer.toString(lineNumber)
+                                + ": Sign already exists.");
+                        lineNumber--;
+
+                    }
                 } else {
-log.warning("There was a problem loading line number " + Integer.toString(lineNumber) + ": World does not exist.");
+                    log.warning("There was a problem loading line number "
+                            + Integer.toString(lineNumber)
+                            + ": World does not exist.");
+                    lineNumber--;
                 }
                 line = in.readLine();
             }

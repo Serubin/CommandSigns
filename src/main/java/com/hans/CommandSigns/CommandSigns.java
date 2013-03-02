@@ -24,6 +24,8 @@ public class CommandSigns extends JavaPlugin {
 
     private boolean debug;
 
+    private int taskId_maintain;
+
     @Override
     public void onDisable() {
         PluginDescriptionFile pdfFile = this.getDescription();
@@ -53,6 +55,9 @@ public class CommandSigns extends JavaPlugin {
 
         pm.registerEvents(this.playerListener, this);
         pm.registerEvents(this.blockListener, this);
+        
+        taskId_maintain = getServer().getScheduler()
+                .scheduleAsyncRepeatingTask(this, db, 5800, 5800);
     }
 
     public boolean hasPermission(Player player, String string) {

@@ -12,7 +12,7 @@ import java.util.Properties;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-public class MySQLDatabase {
+public class MySQLDatabase implements Runnable{
 
     private CommandSigns plugin;
     private Connection conn;
@@ -25,6 +25,20 @@ public class MySQLDatabase {
                 plugin.getConfig().getString("mysql.password"));
         createTable();
         loadData();
+
+    }
+
+    public void run() {
+
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement("SELECT count(*) FROM bans limit 1;");
+            ps.executeQuery();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        plugin.logInfo("CommandSigns has checked in with database");
 
     }
 
@@ -186,6 +200,7 @@ public class MySQLDatabase {
                     ps.setInt(1, id);
                     ps.setString(2, lines[i]);
                     ps.setInt(3, i);
+                    plugin.logInfo(ps.toString());
                     ps.executeUpdate();
                 }
             }

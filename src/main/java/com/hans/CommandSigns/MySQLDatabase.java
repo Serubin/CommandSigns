@@ -32,7 +32,7 @@ public class MySQLDatabase implements Runnable{
 
         PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement("SELECT count(*) FROM bans limit 1;");
+            ps = conn.prepareStatement("SELECT count(*) FROM signs limit 1;");
             ps.executeQuery();
         } catch (SQLException e) {
             // TODO Auto-generated catch block

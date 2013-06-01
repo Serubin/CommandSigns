@@ -1,5 +1,7 @@
 package com.hans.CommandSigns;
 
+import java.util.ArrayList;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -49,11 +51,15 @@ class CommandSignsCommand implements CommandExecutor {
 					player.sendMessage(ChatColor.GRAY + "/" + commandLabel
 							+ " clear" + ChatColor.WHITE
 							+ " - Clear your CommandSign clipboard.");
+					player.sendMessage(ChatColor.RED
+							+ "This feature is disabled:");
 					player.sendMessage("Type" + ChatColor.GRAY + " /"
 							+ commandLabel + " ? edit" + ChatColor.WHITE
 							+ " to learn more about editing.");
 
 				} else if (args[1].equalsIgnoreCase("edit")) {
+					player.sendMessage(ChatColor.RED
+							+ "This feature is disabled.");
 					player.sendMessage("Edit help:");
 					player.sendMessage(ChatColor.GRAY + "/" + commandLabel
 							+ " edit" + ChatColor.WHITE
@@ -170,83 +176,58 @@ class CommandSignsCommand implements CommandExecutor {
 				}
 				// TODO add edit command
 			} else if (args[0].equalsIgnoreCase("edit")) {
-				if (plugin.hasPermission(player, "CommandSigns.edit")) {
-					if (args.length == 1) {
-						if (HashMaps.getPlayerStates(player.getName()) != CommandSignsPlayerState.EDIT) {
-							HashMaps.addPlayerState(playerName,
-									CommandSignsPlayerState.EDIT);
-							player.sendMessage("Click the sign you wish to edit.");
-						}
-						return true;
-					}
-
-					if (HashMaps.getPlayerStates(playerName) == CommandSignsPlayerState.EDIT
-							&& HashMaps.comfirmEdit(playerName)) {
-						int lineNumber;
-						String line = getLine(args, 2);
-						CommandSignsText data = HashMaps.getEditText(player
-								.getName());
-						// Cancels edit
-						if (args[1].equalsIgnoreCase("cancel")) {
-							HashMaps.removePlayerState(playerName);
-						}
-
-						try {
-							lineNumber = Integer.parseInt(args[1].substring(4));
-						} catch (NumberFormatException ex) {
-							player.sendMessage(ChatColor.RED
-									+ "Line number invalid!");
-							return true;
-						}
-						if (lineNumber > max_lines) {
-							player.sendMessage(ChatColor.RED
-									+ "You may not have more then "
-									+ Integer.toString(max_lines)
-									+ " on one CommandSign. This line will not be added!");
-							return true;
-						}
-						if (lineNumber != 0) {
-							if (data.getText()[lineNumber - 1] == null) {
-								player.sendMessage(ChatColor.RED
-										+ "There is no line before line "
-										+ Integer.toString(lineNumber)
-										+ ". This line will not be added!");
-								return false;
-							}
-						}
-
-						// Add data to hashmap
-						player.sendMessage("Updating line text");
-						String[] temp = data.getText();
-						if (temp.length < (lineNumber + 1)) {
-							String[] tempNew = temp.clone();
-							temp = new String[lineNumber + 2];
-							plugin.logDebug(Integer.toString(temp.length));
-							for (int i = 0; i < temp.length; i++) {
-								if (i < temp.length)
-									if (temp[i] != null)
-										temp[i] = tempNew[i];
-									else
-										temp[i] = "";
-								else
-									temp[i] = "";
-							}
-						}
-
-						plugin.logDebug("LineNumber " + lineNumber
-								+ " Temp length " + temp.length);
-						temp[lineNumber] = line;
-						data = new CommandSignsText(temp);
-
-						HashMaps.setTextEdit(player.getName(), data.getText());
-						player.sendMessage("Line " + lineNumber + ": " + line);
-						player.sendMessage("Right click the sign to update");
-						// TODO set new text
-					} else {
-						player.sendMessage(ChatColor.RED
-								+ "You are not currently editing a sign.");
-					}
-				}
+				player.sendMessage(ChatColor.RED
+						+ "This feature has been disabled.");
+				return true;
+				/*
+				 * if (plugin.hasPermission(player, "CommandSigns.edit")) { if
+				 * (args.length == 1) { if
+				 * (HashMaps.getPlayerStates(player.getName()) !=
+				 * CommandSignsPlayerState.EDIT) {
+				 * HashMaps.addPlayerState(playerName,
+				 * CommandSignsPlayerState.EDIT);
+				 * player.sendMessage("Click the sign you wish to edit."); }
+				 * return true; }
+				 * 
+				 * if (HashMaps.getPlayerStates(playerName) ==
+				 * CommandSignsPlayerState.EDIT &&
+				 * HashMaps.comfirmEdit(playerName)) { int lineNumber; String
+				 * line = getLine(args, 2); CommandSignsText data =
+				 * HashMaps.getEditText(player .getName()); // Cancels edit if
+				 * (args[1].equalsIgnoreCase("cancel")) {
+				 * HashMaps.removePlayerState(playerName); }
+				 * 
+				 * try { lineNumber = Integer.parseInt(args[1].substring(4)); }
+				 * catch (NumberFormatException ex) {
+				 * player.sendMessage(ChatColor.RED + "Line number invalid!");
+				 * return true; } if (lineNumber > max_lines) {
+				 * player.sendMessage(ChatColor.RED +
+				 * "You may not have more then " + Integer.toString(max_lines) +
+				 * " on one CommandSign. This line will not be added!"); return
+				 * true; } if (lineNumber != 0) { if (data.getText()[lineNumber
+				 * - 1] == null) { player.sendMessage(ChatColor.RED +
+				 * "There is no line before line " +
+				 * Integer.toString(lineNumber) +
+				 * ". This line will not be added!"); return false; } }
+				 * 
+				 * // Add data to hashmap
+				 * player.sendMessage("Updating line text"); String[] text =
+				 * data.getText(); plugin.logDebug(data.toString());
+				 * ArrayList<String> temp = new ArrayList<String>(); for(String
+				 * str:text){ temp.add(str); plugin.logDebug("Adding to temp " +
+				 * str); } temp.add(line); plugin.logDebug("Adding to temp " +
+				 * line); String[] tempNew = new String[temp.size()]; int count
+				 * = 0; for(Object obj : temp.toArray()){
+				 * plugin.logDebug("Adding to tempNew " + (String)obj);
+				 * tempNew[count] = (String)obj; } data = new
+				 * CommandSignsText(tempNew);
+				 * 
+				 * HashMaps.setTextEdit(player.getName(), data.getText());
+				 * player.sendMessage("Line " + lineNumber + ": " + line);
+				 * player.sendMessage("Right click the sign to update"); // TODO
+				 * set new text } else { player.sendMessage(ChatColor.RED +
+				 * "You are not currently editing a sign."); } }
+				 */
 
 			} else if (args[0].equalsIgnoreCase("debug")) {
 				if (plugin.hasPermission(player, "CommandSigns.debug")) {

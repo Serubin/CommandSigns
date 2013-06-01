@@ -31,7 +31,7 @@ public class CommandSignsPlayerListener implements Listener {
 			    //Try to patch pressure pad kick when TP'd
 			    if(block.getType()==Material.STONE_PLATE  ||
                     block.getType()==Material.WOOD_PLATE){
-			        event.setCancelled(true);
+			        event.setCancelled(false);
 			    }
 				signClickEvent.onRightClick(event, block);
 			}
